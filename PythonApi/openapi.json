@@ -1,0 +1,1197 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Movies API",
+        "description": "Favorite Movies Search & CRUD API",
+        "version": "v1"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Redirect To Swagger",
+                "operationId": "redirect_to_swagger__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Movies": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Get Movies",
+                "description": "Get paginated movies with optional filtering",
+                "operationId": "GetMovies",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "description": "Page number",
+                            "default": 1,
+                            "title": "Page"
+                        },
+                        "description": "Page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "description": "Page size",
+                            "default": 20,
+                            "title": "Size"
+                        },
+                        "description": "Page size"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Search in title, overview, cast, crew",
+                            "title": "Search"
+                        },
+                        "description": "Search in title, overview, cast, crew"
+                    },
+                    {
+                        "name": "genres",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by genre names",
+                            "title": "Genres"
+                        },
+                        "description": "Filter by genre names"
+                    },
+                    {
+                        "name": "year_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum release year",
+                            "title": "Year From"
+                        },
+                        "description": "Minimum release year"
+                    },
+                    {
+                        "name": "year_to",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Maximum release year",
+                            "title": "Year To"
+                        },
+                        "description": "Maximum release year"
+                    },
+                    {
+                        "name": "rating_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum vote average",
+                            "title": "Rating From"
+                        },
+                        "description": "Minimum vote average"
+                    },
+                    {
+                        "name": "rating_to",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Maximum vote average",
+                            "title": "Rating To"
+                        },
+                        "description": "Maximum vote average"
+                    },
+                    {
+                        "name": "runtime_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum runtime",
+                            "title": "Runtime From"
+                        },
+                        "description": "Minimum runtime"
+                    },
+                    {
+                        "name": "runtime_to",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Maximum runtime",
+                            "title": "Runtime To"
+                        },
+                        "description": "Maximum runtime"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Original language",
+                            "title": "Language"
+                        },
+                        "description": "Original language"
+                    },
+                    {
+                        "name": "is_favorite",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter favorites",
+                            "title": "Is Favorite"
+                        },
+                        "description": "Filter favorites"
+                    },
+                    {
+                        "name": "personal_rating_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum personal rating",
+                            "title": "Personal Rating From"
+                        },
+                        "description": "Minimum personal rating"
+                    },
+                    {
+                        "name": "personal_rating_to",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Maximum personal rating",
+                            "title": "Personal Rating To"
+                        },
+                        "description": "Maximum personal rating"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedMovieResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Create Movie",
+                "description": "Create a new movie",
+                "operationId": "CreateMovie",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateMovieCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "title": "Response Createmovie"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Movies/search": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Search Movies",
+                "description": "Search movies by title, overview, cast, or crew",
+                "operationId": "SearchMovies",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Search query",
+                            "title": "Q"
+                        },
+                        "description": "Search query"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "description": "Page number",
+                            "default": 1,
+                            "title": "Page"
+                        },
+                        "description": "Page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "description": "Page size",
+                            "default": 20,
+                            "title": "Size"
+                        },
+                        "description": "Page size"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedMovieResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Movies/favorites": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Get Favorite Movies",
+                "description": "Get all favorite movies",
+                "operationId": "GetFavoriteMovies",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "description": "Page number",
+                            "default": 1,
+                            "title": "Page"
+                        },
+                        "description": "Page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "description": "Page size",
+                            "default": 20,
+                            "title": "Size"
+                        },
+                        "description": "Page size"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedMovieResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Movies/{id}": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Get Movie",
+                "description": "Get a specific movie by ID",
+                "operationId": "GetMovie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Movie"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Update Movie",
+                "description": "Update an existing movie",
+                "operationId": "UpdateMovie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateMovieCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Delete Movie",
+                "description": "Delete a movie",
+                "operationId": "DeleteMovie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Movies/{id}/favorite": {
+            "post": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Toggle Favorite",
+                "description": "Toggle favorite status of a movie",
+                "operationId": "ToggleFavorite",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stats": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Get Stats",
+                "description": "Get database statistics",
+                "operationId": "GetStats",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateMovieCommand": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title",
+                        "description": "Movie title"
+                    },
+                    "overview": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Overview"
+                    },
+                    "genres": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Genres"
+                    },
+                    "keywords": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Keywords"
+                    },
+                    "tagline": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tagline"
+                    },
+                    "cast": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Cast"
+                    },
+                    "crew": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Crew"
+                    },
+                    "production_companies": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Production Companies"
+                    },
+                    "production_countries": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Production Countries"
+                    },
+                    "spoken_languages": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Spoken Languages"
+                    },
+                    "original_language": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Original Language"
+                    },
+                    "original_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Original Title"
+                    },
+                    "release_date": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Release Date"
+                    },
+                    "runtime": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Runtime"
+                    },
+                    "vote_average": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Vote Average"
+                    },
+                    "vote_count": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Vote Count"
+                    },
+                    "popularity": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Popularity"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title"
+                ],
+                "title": "CreateMovieCommand"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "Movie": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title",
+                        "description": "Movie title"
+                    },
+                    "overview": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Overview",
+                        "description": "Movie overview/plot"
+                    },
+                    "genres": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Genres",
+                        "description": "List of genre objects"
+                    },
+                    "keywords": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Keywords",
+                        "description": "List of keyword objects"
+                    },
+                    "tagline": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tagline",
+                        "description": "Movie tagline"
+                    },
+                    "cast": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Cast",
+                        "description": "List of cast members"
+                    },
+                    "crew": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Crew",
+                        "description": "List of crew members"
+                    },
+                    "production_companies": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Production Companies",
+                        "description": "Production companies"
+                    },
+                    "production_countries": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Production Countries",
+                        "description": "Production countries"
+                    },
+                    "spoken_languages": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Spoken Languages",
+                        "description": "Spoken languages"
+                    },
+                    "original_language": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Original Language",
+                        "description": "Original language code"
+                    },
+                    "original_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Original Title",
+                        "description": "Original title"
+                    },
+                    "release_date": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Release Date",
+                        "description": "Release date"
+                    },
+                    "runtime": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Runtime",
+                        "description": "Runtime in minutes"
+                    },
+                    "vote_average": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Vote Average",
+                        "description": "Average vote score"
+                    },
+                    "vote_count": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Vote Count",
+                        "description": "Number of votes"
+                    },
+                    "popularity": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Popularity",
+                        "description": "Popularity score"
+                    },
+                    "is_favorite": {
+                        "type": "boolean",
+                        "title": "Is Favorite",
+                        "description": "User favorite flag",
+                        "default": false
+                    },
+                    "personal_rating": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Personal Rating",
+                        "description": "Personal rating (1-10)"
+                    },
+                    "personal_notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Personal Notes",
+                        "description": "Personal notes"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "title"
+                ],
+                "title": "Movie"
+            },
+            "PaginatedMovieResponse": {
+                "properties": {
+                    "items": {
+                        "items": {
+                            "$ref": "#/components/schemas/Movie"
+                        },
+                        "type": "array",
+                        "title": "Items"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "title": "Total"
+                    },
+                    "page": {
+                        "type": "integer",
+                        "title": "Page"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "title": "Size"
+                    },
+                    "pages": {
+                        "type": "integer",
+                        "title": "Pages"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "size",
+                    "pages"
+                ],
+                "title": "PaginatedMovieResponse"
+            },
+            "UpdateMovieCommand": {
+                "properties": {
+                    "title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Title"
+                    },
+                    "overview": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Overview"
+                    },
+                    "is_favorite": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Is Favorite"
+                    },
+                    "personal_rating": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "maximum": 10.0,
+                                "minimum": 1.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Personal Rating",
+                        "description": "Personal rating (1-10)"
+                    },
+                    "personal_notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Personal Notes"
+                    }
+                },
+                "type": "object",
+                "title": "UpdateMovieCommand"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

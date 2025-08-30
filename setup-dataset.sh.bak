@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Setup script for Movie Collection App dataset
+# Downloads the Semantic_Recent.csv movie dataset
+
+echo "🎬 Movie Collection App - Dataset Setup"
+echo "======================================"
+
+# Configuration
+DATASET_URL=""
+DATASET_FILE="Semantic_Recent.csv"
+TEMP_FILE="/tmp/Semantic_Recent.csv"
+
+# Check if dataset already exists
+if [ -f "$DATASET_FILE" ]; then
+    echo "✅ Dataset already exists: $DATASET_FILE"
+    echo "📊 File size: $(ls -lh $DATASET_FILE | awk '{print $5}')"
+    echo "📈 Movie count: $(tail -n +2 $DATASET_FILE | wc -l) movies"
+    exit 0
+fi
+
+echo "📥 Setting up movie dataset..."
+
+# Method 1: Download from URL (if available)
+if [ ! -z "$DATASET_URL" ]; then
+    echo "🌐 Downloading dataset from: $DATASET_URL"
+    
+    # Check if curl or wget is available
+    if command -v curl >/dev/null 2>&1; then
+        curl -L "$DATASET_URL" -o "$TEMP_FILE"
+    elif command -v wget >/dev/null 2>&1; then
+        wget "$DATASET_URL" -O "$TEMP_FILE"
+    else
+        echo "❌ Error: Neither curl nor wget found. Please install one of them."
+        exit 1
+    fi
+    
+    # Verify download
+    if [ -f "$TEMP_FILE" ]; then
+        mv "$TEMP_FILE" "$DATASET_FILE"
+        echo "✅ Dataset downloaded successfully!"
+    else
+        echo "❌ Error: Failed to download dataset"
+        exit 1
+    fi
+else
+    # Method 2: Manual setup instructions
+    echo "📋 Manual Dataset Setup Required"
+    echo ""
+    echo "The movie dataset needs to be obtained manually:"
+    echo ""
+    echo "1. 📂 Download or obtain the movie dataset file"
+    echo "2. 🏷️  Ensure it has the following CSV format:"
+    echo "   - title_y, overview, genres, keywords, tagline, cast, crew, etc."
+    echo "3. 📁 Save it as: $DATASET_FILE"
+    echo "4. ✅ Run this script again to verify the setup"
+    echo ""
+    echo "Expected format:"
+    echo "title_y,overview,genres,keywords,tagline,cast,crew,production_companies,..."
+    echo ""
+    echo "The dataset should contain ~4,808 movies with comprehensive metadata."
+    echo ""
+    echo "Popular movie datasets can be found on:"
+    echo "- Kaggle (https://www.kaggle.com/datasets)"
+    echo "- The Movie Database (TMDB)"
+    echo "- MovieLens datasets"
+    echo ""
+    exit 1
+fi
+
+# Verify the dataset format
+echo "🔍 Verifying dataset format..."
+
+if [ ! -f "$DATASET_FILE" ]; then
+    echo "❌ Error: Dataset file not found"
+    exit 1
+fi
+
+# Check file size
+FILE_SIZE=$(ls -lh "$DATASET_FILE" | awk '{print $5}')
+echo "📊 Dataset size: $FILE_SIZE"
+
+# Count movies (excluding header)
+MOVIE_COUNT=$(tail -n +2 "$DATASET_FILE" | wc -l)
+echo "📈 Movies in dataset: $MOVIE_COUNT"
+
+# Verify CSV header
+HEADER=$(head -n 1 "$DATASET_FILE")
+if [[ "$HEADER" == *"title_y"* ]] && [[ "$HEADER" == *"overview"* ]] && [[ "$HEADER" == *"genres"* ]]; then
+    echo "✅ Dataset format verified!"
+    echo ""
+    echo "🎉 Setup complete! You can now start the application:"
+    echo ""
+    echo "Backend (Terminal 1):"
+    echo "  cd PythonApi"
+    echo "  python run_app.py"
+    echo ""
+    echo "Frontend (Terminal 2):"
+    echo "  cd web"
+    echo "  pnpm dev"
+    echo ""
+else
+    echo "❌ Warning: Dataset format may not be compatible"
+    echo "Expected columns: title_y, overview, genres, keywords, etc."
+    echo "Found header: $HEADER"
+fi
