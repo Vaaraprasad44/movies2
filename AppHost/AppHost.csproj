@@ -30,7 +30,7 @@
     <Exec Command="pnpm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
   </Target>
 
-  <Target Name="RestorePython" BeforeTargets="Build" Condition="'$DesignTimeBuild' != 'true' ">
+  <Target Name="RestorePython" BeforeTargets="Build" Condition="'$(DesignTimeBuild)' != 'true' ">
     <ItemGroup>
       <RequirementsTxtFiles Include="..\*\requirements.txt" />
     </ItemGroup>
